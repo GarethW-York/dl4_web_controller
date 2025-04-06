@@ -533,6 +533,130 @@ function onEnabled() {
       });
   }
 
+  function setupSummaryFeature() {
+    const showSummaryButton = document.getElementById("showSummaryButton");
+    const showSummaryNav = document.getElementById("showSummaryNav");
+    const summaryDialog = document.getElementById("summaryDialog");
+    const closeSummaryButton = document.getElementById("closeSummaryButton");
+
+    function getSummary() {
+      const summary = {
+        preset: document.querySelector("#presets .mdc-select__selected-text")
+          .textContent,
+        delay: {
+          model: document.querySelector("#delays .mdc-select__selected-text")
+            .textContent,
+          time: document.querySelector(
+            '[data-cc="11"] .mdc-slider__value-indicator-text'
+          ).textContent,
+          subdivision: document.querySelector(".subdivision-label").textContent,
+          repeats: document.querySelector(
+            '[data-cc="13"] .mdc-slider__value-indicator-text'
+          ).textContent,
+          tweak: {
+            parameter: document.querySelector("#delays .tweak").textContent,
+            value: document.querySelector(
+              '[data-cc="14"] .mdc-slider__value-indicator-text'
+            ).textContent,
+          },
+          tweez: {
+            parameter: document.querySelector("#delays .tweez").textContent,
+            value: document.querySelector(
+              '[data-cc="15"] .mdc-slider__value-indicator-text'
+            ).textContent,
+          },
+          mix: document.querySelector(
+            '[data-cc="16"] .mdc-slider__value-indicator-text'
+          ).textContent,
+        },
+        reverb: {
+          model: document.querySelector("#reverbs .mdc-select__selected-text")
+            .textContent,
+          decay: document.querySelector(
+            '[data-cc="17"] .mdc-slider__value-indicator-text'
+          ).textContent,
+          tweak: {
+            parameter: document.querySelector("#reverbs .tweak").textContent,
+            value: document.querySelector(
+              '[data-cc="18"] .mdc-slider__value-indicator-text'
+            ).textContent,
+          },
+          mix: document.querySelector(
+            '[data-cc="20"] .mdc-slider__value-indicator-text'
+          ).textContent,
+          routing: document
+            .querySelector(".segment-button.active")
+            .textContent.trim(),
+        },
+      };
+
+      return `
+            <section>
+                <p>These are the current on-screen settings. They may not be identical to the settings on the pedal, eg. if they have not been edited or the preset has been changed. All numbers are MIDI values.</p>
+                <h4>Preset</h4>
+                <ul>
+                    <li>${summary.preset || "None selected"}</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h4>Delay</h4>
+                <ul>
+                    <li>Model: ${summary.delay.model || "None selected"}</li>
+                    <li>Time: ${summary.delay.time || "63"}</li>
+                    <li>Subdivision: ${summary.delay.subdivision || "1/4"}</li>
+                    <li>Repeats: ${summary.delay.repeats || "63"}</li>
+                    <li>${summary.delay.tweak.parameter}: ${
+        summary.delay.tweak.value || "63"
+      }</li>
+                    <li>${summary.delay.tweez.parameter}: ${
+        summary.delay.tweez.value || "63"
+      }</li>
+                    <li>Mix: ${summary.delay.mix || "63"}</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h4>Reverb</h4>
+                <ul>
+                    <li>Model: ${summary.reverb.model || "None selected"}</li>
+                    <li>Decay: ${summary.reverb.decay || "63"}</li>
+                    <li>${summary.reverb.tweak.parameter}: ${
+        summary.reverb.tweak.value || "63"
+      }</li>
+                    <li>Mix: ${summary.reverb.mix || "63"}</li>
+                    <li>Routing: ${summary.reverb.routing}</li>
+                </ul>
+            </section>
+        `;
+    }
+
+    function showSummary() {
+      document.getElementById("summaryText").innerHTML = getSummary();
+      summaryDialog.classList.add("visible");
+      document.querySelector(".backdrop").classList.add("visible");
+
+      // If on mobile, close the sidenav
+      if (window.innerWidth <= 768) {
+        document.querySelector(".sidenav").classList.remove("open");
+      }
+    }
+
+    function closeSummary() {
+      summaryDialog.classList.remove("visible");
+      document.querySelector(".backdrop").classList.remove("visible");
+    }
+
+    showSummaryButton.addEventListener("click", showSummary);
+    showSummaryNav.addEventListener("click", (e) => {
+      e.preventDefault();
+      showSummary();
+    });
+    closeSummaryButton.addEventListener("click", closeSummary);
+
+    // Close on backdrop click
+    document.querySelector(".backdrop").addEventListener("click", closeSummary);
+  }
   // Component initialization
   function initializeMDCComponents() {
     document.querySelectorAll(".mdc-slider").forEach((slider) => {
@@ -552,4 +676,5 @@ function onEnabled() {
   setupSliderListeners();
   setupLooperButtons();
   setupNavigation();
+  setupSummaryFeature();
 }
