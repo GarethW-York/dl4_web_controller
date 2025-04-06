@@ -12,7 +12,7 @@ A web-based MIDI controller for the Line 6 DL4 MkII delay pedal. This applicatio
 
 ## Usage
 
-1. Connect your DL4 MkII to your computer via USB
+1. Connect your DL4 MkII to your computer or mobile device via USB
 2. Open the web application
 3. Allow MIDI access when prompted
 4. Control your DL4 MkII using the interface
