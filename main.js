@@ -1,8 +1,69 @@
+// Add loading state and indicator immediately
+document.body.classList.add("loading");
+document.getElementById("midi-devices").innerHTML = `
+  <div class="loading-indicator">
+    Initializing MIDI access...
+  </div>
+`;
+
+// Then proceed with MIDI initialization
 WebMidi.enable()
   .then(onEnabled)
-  .catch((err) => alert(err));
+  .catch((err) => {
+    const midiDevicesDiv = document.getElementById("midi-devices");
+    let errorMessage = "Error accessing MIDI";
+
+    if (err.name === "SecurityError") {
+      errorMessage =
+        "MIDI access denied. Please allow MIDI access in your browser settings.";
+    } else if (err.name === "NotSupportedError") {
+      errorMessage =
+        "WebMIDI is not supported in this browser. Please use a modern browser like Chrome or Edge.";
+    }
+
+    midiDevicesDiv.innerHTML = `
+      <div class="error-message">
+        ${errorMessage}<br>
+        ${err.message}
+      </div>
+    `;
+  });
 
 function onEnabled() {
+  document.body.classList.remove("loading");
+  const midiDevicesDiv = document.getElementById("midi-devices");
+
+  // Clear the loading indicator
+  midiDevicesDiv.innerHTML = "<h2>Confirm device connection</h2>";
+
+  // Check for MIDI devices
+  if (WebMidi.outputs.length < 1) {
+    midiDevicesDiv.innerHTML += `
+      <div class="error-message">
+        No MIDI devices detected.
+      </div>
+    `;
+  } else {
+    let devicesFound = false;
+    WebMidi.outputs.forEach((device, index) => {
+      if (device.name === "DL4 MkII") {
+        devicesFound = true;
+        midiDevicesDiv.innerHTML += `
+          <div class="success-message">
+            ${device.name} detected as MIDI output ${index}.
+          </div>
+        `;
+      }
+    });
+
+    if (!devicesFound) {
+      midiDevicesDiv.innerHTML += `
+        <div class="error-message">
+          DL4 MkII not found among connected MIDI devices.
+        </div>
+      `;
+    }
+  }
   // Parameter update animation function
   function updateParameter(span, newValue) {
     span.classList.add("fade-out");
@@ -112,18 +173,6 @@ function onEnabled() {
       15: { name: "Reverb Off", tweak: "None" },
     },
   };
-
-  // MIDI device detection
-  const midiDevicesDiv = document.getElementById("midi-devices");
-  if (WebMidi.outputs.length < 1) {
-    midiDevicesDiv.innerHTML += "No MIDI devices detected.";
-  } else {
-    WebMidi.outputs.forEach((device, index) => {
-      if (device.name === "DL4 MkII") {
-        midiDevicesDiv.innerHTML += `${device.name} detected as MIDI output ${index}.<br>`;
-      }
-    });
-  }
 
   // Navigation setup
   function setupNavigation() {

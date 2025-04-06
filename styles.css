@@ -25,6 +25,57 @@ body {
   background-color: var(--mdc-theme-background);
 }
 
+.loading {
+  cursor: wait;
+}
+
+.error-message {
+  color: var(--mdc-theme-error);
+  padding: var(--spacing-md);
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  margin: var(--spacing-md) 0;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  color: var(--mdc-theme-primary);
+}
+
+.loading-indicator::after {
+  content: "";
+  width: 1em;
+  height: 1em;
+  margin-left: var(--spacing-md);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.success-message {
+  color: var(--mdc-theme-primary);
+  padding: var(--spacing-md);
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  margin: var(--spacing-md) 0;
+}
+
+/* Hide main content while loading */
+.loading .main-content > *:not(#midi-devices) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 /* Typography */
 h1 {
   font-size: 2.125rem;
