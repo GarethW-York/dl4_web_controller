@@ -170,7 +170,7 @@ function onEnabled() {
       12: { name: "Hot Springs", tweak: "Spring Count" },
       13: { name: "Hall", tweak: "Predelay" },
       14: { name: "Glitz", tweak: "Mod Depth" },
-      14: { name: "Reverb Off", tweak: "Tweak" },
+      15: { name: "Reverb Off", tweak: "Tweak" },
     },
   };
 
