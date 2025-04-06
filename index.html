@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>DL4 MkII Controller</title>
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
+        <script src="main.js" type="module"></script>
+    </head>
+  <body>
+    <button class="menu-toggle" aria-label="Toggle navigation menu">
+        <span class="material-icons">menu</span>
+    </button>
+    
+    <nav class="sidenav" aria-label="Main navigation">
+        <div class="sidenav-header">
+            <h2>DL4 MkII</h2>
+        </div>
+        <div class="sidenav-content">
+            <a href="#midi-devices" class="nav-item">
+                <span class="material-icons">cable</span>
+                <span class="nav-label">Connection</span>
+            </a>
+            <a href="#presets" class="nav-item">
+                <span class="material-icons">playlist_play</span>
+                <span class="nav-label">Presets</span>
+            </a>
+            <a href="#delays" class="nav-item">
+                <span class="material-icons">waves</span>
+                <span class="nav-label">Delays</span>
+            </a>
+            <a href="#reverbs" class="nav-item">
+                <span class="material-icons">blur_on</span>
+                <span class="nav-label">Reverbs</span>
+            </a>
+            <a href="#looper" class="nav-item">
+                <span class="material-icons">loop</span>
+                <span class="nav-label">Looper</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+    <h1>DL4 MkII Controller</h1>
+    <div id="midi-devices">
+        <h2>Confirm device connection</h2>
+
+    </div>
+    <div id="presets">
+        <div class="options">
+            <h2>Presets</h2>
+            <p>Select a preset number to activate it on the DL4 MkII:</p>
+            <div class="mdc-select mdc-select--outlined">
+                <div class="mdc-select__anchor" aria-labelledby="preset-label">
+                    <span class="mdc-notched-outline">
+                        <span class="mdc-notched-outline__leading"></span>
+                        <span class="mdc-notched-outline__notch">
+                            <span id="preset-label" class="mdc-floating-label">Select Preset</span>
+                        </span>
+                        <span class="mdc-notched-outline__trailing"></span>
+                    </span>
+                    <span class="mdc-select__selected-text-container">
+                        <span class="mdc-select__selected-text"></span>
+                    </span>
+                    <span class="mdc-select__dropdown-icon">
+                        <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                            <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+                            <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+                        </svg>
+                    </span>
+                </div>
+                <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                    <ul class="mdc-list" role="listbox"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="delays">
+        <div class="options">
+            <h2>Delays</h2>
+            <div class="model-select">
+                <div class="mdc-select mdc-select--outlined">
+                    <div class="mdc-select__anchor" aria-labelledby="delay-label">
+                        <span class="mdc-notched-outline">
+                            <span class="mdc-notched-outline__leading"></span>
+                            <span class="mdc-notched-outline__notch">
+                                <span id="delay-label" class="mdc-floating-label">Select Delay Model</span>
+                            </span>
+                            <span class="mdc-notched-outline__trailing"></span>
+                        </span>
+                        <span class="mdc-select__selected-text-container">
+                            <span class="mdc-select__selected-text"></span>
+                        </span>
+                        <span class="mdc-select__dropdown-icon">
+                            <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                                <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+                                <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                        <ul class="mdc-list" role="listbox"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <!-- <h3>Controls</h3> -->
+            <h4>Time</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="11">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <h4>Subdivisions</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete mdc-slider--tick-marks" data-cc="12">
+                    <input class="mdc-slider__input" type="range" min="0" max="8" value="4" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                        <div class="mdc-slider__tick-marks">
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text"></span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="subdivision-label">1/4</div>
+    
+            <h4>Repeats</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="13">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <h4>Tweak: <div class="parameter-wrapper"><span class="tweak">Tweak</span></div></h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="14">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <h4>Tweez: <div class="parameter-wrapper"><span class="tweez">Tweez</span></div></h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="15">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <h4>Mix</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="16">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="reverbs">
+        <div class="options">
+            <h2>Reverb</h2>
+            <div class="model-select">
+                <div class="mdc-select mdc-select--outlined">
+                    <div class="mdc-select__anchor" aria-labelledby="reverb-label">
+                        <span class="mdc-notched-outline">
+                            <span class="mdc-notched-outline__leading"></span>
+                            <span class="mdc-notched-outline__notch">
+                                <span id="reverb-label" class="mdc-floating-label">Select Reverb Model</span>
+                            </span>
+                            <span class="mdc-notched-outline__trailing"></span>
+                        </span>
+                        <span class="mdc-select__selected-text-container">
+                            <span class="mdc-select__selected-text"></span>
+                        </span>
+                        <span class="mdc-select__dropdown-icon">
+                            <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                                <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+                                <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                        <ul class="mdc-list" role="listbox"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <!-- <h3>Controls</h3> -->
+            <h4>Decay</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="17">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <h4>Tweak Reverb Parameter: <div class="parameter-wrapper"><span class="tweak">Tweak</span></div></h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="18">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Reverb Mix (DSP Dry Path) / Reverb Level (Analog Dry Path)</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete" data-cc="20">
+                    <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text">63</span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <h4>Tweez: Reverb-Delay Routing</h4>
+            <div class="slider-container">
+                <div class="mdc-slider mdc-slider--discrete mdc-slider--tick-marks" data-cc="19">
+                    <input class="mdc-slider__input" type="range" min="0" max="2" value="0" step="1">
+                    <div class="mdc-slider__track">
+                        <div class="mdc-slider__track--inactive"></div>
+                        <div class="mdc-slider__track--active">
+                            <div class="mdc-slider__track--active_fill"></div>
+                        </div>
+                        <div class="mdc-slider__tick-marks">
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                            <div class="mdc-slider__tick-mark--active"></div>
+                        </div>
+                    </div>
+                    <div class="mdc-slider__thumb">
+                        <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                            <div class="mdc-slider__value-indicator">
+                                <span class="mdc-slider__value-indicator-text"></span>
+                            </div>
+                        </div>
+                        <div class="mdc-slider__thumb-knob"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="routing-label">Reverb before delay</div>
+        </div>
+    </div>
+
+    <div id="looper">
+        <div class="controls">
+            <h2>Looper</h2>
+            <div class="button-grid">
+                <!-- Record Card -->
+                <div class="looper-card">
+                    <h3>Record</h3>
+                    <div class="button-row">
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="60" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">fiber_manual_record</span>
+                            <span class="mdc-button__label">Record</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="60" data-value2="0">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">loop</span>
+                            <span class="mdc-button__label">Overdub</span>
+                        </button>
+                    </div>
+                    <div class="button-row">
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="63" data-value2="0">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">undo</span>
+                            <span class="mdc-button__label">Undo</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="63" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">redo</span>
+                            <span class="mdc-button__label">Redo</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Playback Card -->
+                <div class="looper-card">
+                    <h3>Playback</h3>
+                    <div class="button-row">
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="61" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">play_arrow</span>
+                            <span class="mdc-button__label">Play</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="61" data-value2="0">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">stop</span>
+                            <span class="mdc-button__label">Stop</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="62" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">repeat_one</span>
+                            <span class="mdc-button__label">Play Once</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Manipulate Card -->
+                <div class="looper-card">
+                    <h3>Manipulate</h3>
+                    <div class="button-row">
+                        <button class="mdc-button mdc-button--outlined active" data-command="looper" data-value1="65" data-value2="0">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">fast_forward</span>
+                            <span class="mdc-button__label">Forward</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="65" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">fast_rewind</span>
+                            <span class="mdc-button__label">Reverse</span>
+                        </button>
+                    </div>
+                    <div class="button-row">
+                        <button class="mdc-button mdc-button--outlined active" data-command="looper" data-value1="66" data-value2="0">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">speed</span>
+                            <span class="mdc-button__label">Full Speed</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="66" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="material-icons mdc-button__icon">slow_motion_video</span>
+                            <span class="mdc-button__label">Half Speed</span>
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Classic Looper Card -->
+                <div class="looper-card">
+                    <h3>Classic looper</h3>
+                    <div class="button-row">
+                        <button class="mdc-button mdc-button--outlined" data-command="looper" data-value1="9" data-value2="127">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Classic Looper On</span>
+                        </button>
+                        <button class="mdc-button mdc-button--outlined active" data-command="looper" data-value1="9" data-value2="0">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Classic Looper Off</span>
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Looper Controls Card -->
+                <div class="looper-controls">
+                    <div class="looper-card">
+                        <h4>Time</h4>
+                        <div class="slider-container">
+                            <div class="mdc-slider mdc-slider--discrete" data-cc="11">
+                                <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                                <div class="mdc-slider__track">
+                                    <div class="mdc-slider__track--inactive"></div>
+                                    <div class="mdc-slider__track--active">
+                                        <div class="mdc-slider__track--active_fill"></div>
+                                    </div>
+                                </div>
+                                <div class="mdc-slider__thumb">
+                                    <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                                        <div class="mdc-slider__value-indicator">
+                                            <span class="mdc-slider__value-indicator-text">63</span>
+                                        </div>
+                                    </div>
+                                    <div class="mdc-slider__thumb-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Repeats</h4>
+                        <div class="slider-container">
+                            <div class="mdc-slider mdc-slider--discrete" data-cc="13">
+                                <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                                <div class="mdc-slider__track">
+                                    <div class="mdc-slider__track--inactive"></div>
+                                    <div class="mdc-slider__track--active">
+                                        <div class="mdc-slider__track--active_fill"></div>
+                                    </div>
+                                </div>
+                                <div class="mdc-slider__thumb">
+                                    <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                                        <div class="mdc-slider__value-indicator">
+                                            <span class="mdc-slider__value-indicator-text">63</span>
+                                        </div>
+                                    </div>
+                                    <div class="mdc-slider__thumb-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Tweak: <div class="parameter-wrapper"><span class="tweak">Echo Mod</span></div></h4>
+                        <div class="slider-container">
+                            <div class="mdc-slider mdc-slider--discrete" data-cc="14">
+                                <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                                <div class="mdc-slider__track">
+                                    <div class="mdc-slider__track--inactive"></div>
+                                    <div class="mdc-slider__track--active">
+                                        <div class="mdc-slider__track--active_fill"></div>
+                                    </div>
+                                </div>
+                                <div class="mdc-slider__thumb">
+                                    <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                                        <div class="mdc-slider__value-indicator">
+                                            <span class="mdc-slider__value-indicator-text">63</span>
+                                        </div>
+                                    </div>
+                                    <div class="mdc-slider__thumb-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Tweez: <div class="parameter-wrapper"><span class="tweez">Echo Vol</span></div></h4>
+                        <div class="slider-container">
+                            <div class="mdc-slider mdc-slider--discrete" data-cc="15">
+                                <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                                <div class="mdc-slider__track">
+                                    <div class="mdc-slider__track--inactive"></div>
+                                    <div class="mdc-slider__track--active">
+                                        <div class="mdc-slider__track--active_fill"></div>
+                                    </div>
+                                </div>
+                                <div class="mdc-slider__thumb">
+                                    <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                                        <div class="mdc-slider__value-indicator">
+                                            <span class="mdc-slider__value-indicator-text">63</span>
+                                        </div>
+                                    </div>
+                                    <div class="mdc-slider__thumb-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Mix</h4>
+                        <div class="slider-container">
+                            <div class="mdc-slider mdc-slider--discrete" data-cc="16">
+                                <input class="mdc-slider__input" type="range" min="0" max="127" value="63" step="1">
+                                <div class="mdc-slider__track">
+                                    <div class="mdc-slider__track--inactive"></div>
+                                    <div class="mdc-slider__track--active">
+                                        <div class="mdc-slider__track--active_fill"></div>
+                                    </div>
+                                </div>
+                                <div class="mdc-slider__thumb">
+                                    <div class="mdc-slider__value-indicator-container" aria-hidden="true">
+                                        <div class="mdc-slider__value-indicator">
+                                            <span class="mdc-slider__value-indicator-text">63</span>
+                                        </div>
+                                    </div>
+                                    <div class="mdc-slider__thumb-knob"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+  </body>
+</html>
