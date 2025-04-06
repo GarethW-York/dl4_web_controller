@@ -34,7 +34,7 @@ function onEnabled() {
   const midiDevicesDiv = document.getElementById("midi-devices");
 
   // Clear the loading indicator
-  midiDevicesDiv.innerHTML = "<h2>Confirm device connection</h2>";
+  midiDevicesDiv.innerHTML = "<h2>Pedal connection</h2>";
 
   // Check for MIDI devices
   if (WebMidi.outputs.length < 1) {
@@ -59,7 +59,7 @@ function onEnabled() {
     if (!devicesFound) {
       midiDevicesDiv.innerHTML += `
         <div class="error-message">
-          DL4 MkII not found among connected MIDI devices.
+          DL4 MkII not found among connected MIDI devices. Check your connection and refresh the page. If prompted give permission for MIDI access.
         </div>
       `;
     }
@@ -170,6 +170,7 @@ function onEnabled() {
       12: { name: "Hot Springs", tweak: "Spring Count" },
       13: { name: "Hall", tweak: "Predelay" },
       14: { name: "Glitz", tweak: "Mod Depth" },
+      14: { name: "Reverb Off", tweak: "Tweak" },
     },
   };
 
