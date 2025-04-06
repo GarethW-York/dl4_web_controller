@@ -437,33 +437,25 @@ function onEnabled() {
     subdivisionLabel.textContent = subdivisions[mdcSlider.getValue()];
   }
 
-  function setupRoutingSlider() {
-    const slider = document.querySelector('[data-cc="19"]');
-    const routingLabel = document.querySelector(".routing-label");
-    const routingOptions = [
-      "Reverb before delay",
-      "Reverb and delay in parallel",
-      "Reverb after delay",
-    ];
+  function setupRoutingButtons() {
+    const buttons = document.querySelectorAll(".segment-button");
 
-    const mdcSlider = slider.mdcSliderInstance;
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        // Remove active class from all buttons
+        buttons.forEach((btn) => btn.classList.remove("active"));
 
-    mdcSlider.listen("MDCSlider:change", () => {
-      const value = mdcSlider.getValue();
-      routingLabel.textContent = routingOptions[value];
+        // Add active class to clicked button
+        button.classList.add("active");
 
-      const myOutput = WebMidi.getOutputByName("DL4 MkII");
-      const myChannel = myOutput.channels[1];
-      myChannel.sendControlChange(19, value);
-      console.log(`Sent CC19 value ${value}`);
+        // Get the value and send MIDI
+        const value = parseInt(button.dataset.value);
+        const myOutput = WebMidi.getOutputByName("DL4 MkII");
+        const myChannel = myOutput.channels[1];
+        myChannel.sendControlChange(19, value);
+        console.log(`Sent CC19 value ${value}`);
+      });
     });
-
-    mdcSlider.listen("MDCSlider:input", () => {
-      const value = mdcSlider.getValue();
-      routingLabel.textContent = routingOptions[value];
-    });
-
-    routingLabel.textContent = routingOptions[mdcSlider.getValue()];
   }
 
   function setupSliderListeners() {
@@ -549,7 +541,7 @@ function onEnabled() {
     });
 
     setupTimeSubdivisionSlider();
-    setupRoutingSlider();
+    setupRoutingButtons();
   }
 
   // Initialize everything
