@@ -1,3 +1,5 @@
+// A - Initial Setup and MIDI Initialization:
+
 // Add loading state and indicator immediately
 document.body.classList.add("loading");
 document.getElementById("midi-devices").innerHTML = `
@@ -28,6 +30,8 @@ WebMidi.enable()
       </div>
     `;
   });
+
+// B - Device Detection and Parameter Configuration
 
 function onEnabled() {
   document.body.classList.remove("loading");
@@ -64,6 +68,7 @@ function onEnabled() {
       `;
     }
   }
+
   // Parameter update animation function
   function updateParameter(span, newValue) {
     span.classList.add("fade-out");
@@ -174,6 +179,8 @@ function onEnabled() {
     },
   };
 
+  // C - Navigation setup and dropdown generation
+
   // Navigation setup
   function setupNavigation() {
     const menuToggle = document.querySelector(".menu-toggle");
@@ -203,7 +210,7 @@ function onEnabled() {
     // Handle navigation
     navItems.forEach((item) => {
       item.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent default anchor behavior
+        e.preventDefault();
 
         // Remove active class from all items
         navItems.forEach((nav) => nav.classList.remove("active"));
@@ -401,6 +408,8 @@ function onEnabled() {
     });
   }
 
+  // D - Slider setup and looper control functions
+
   // Slider setup functions
   function setupTimeSubdivisionSlider() {
     const slider = document.querySelector('[data-cc="12"]');
@@ -533,6 +542,8 @@ function onEnabled() {
       });
   }
 
+  // E - Summary Feature and Component Initialization
+
   function setupSummaryFeature() {
     const showSummaryButton = document.getElementById("showSummaryButton");
     const showSummaryNav = document.getElementById("showSummaryNav");
@@ -591,44 +602,44 @@ function onEnabled() {
       };
 
       return `
-            <section>
-                <p>These are the current on-screen settings. They may not be identical to the settings on the pedal, eg. if they have not been edited or the preset has been changed. All numbers are MIDI values.</p>
-                <h4>Preset</h4>
-                <ul>
-                    <li>${summary.preset || "None selected"}</li>
-                </ul>
-            </section>
-            
-            <section>
-                <h4>Delay</h4>
-                <ul>
-                    <li>Model: ${summary.delay.model || "None selected"}</li>
-                    <li>Time: ${summary.delay.time || "63"}</li>
-                    <li>Subdivision: ${summary.delay.subdivision || "1/4"}</li>
-                    <li>Repeats: ${summary.delay.repeats || "63"}</li>
-                    <li>${summary.delay.tweak.parameter}: ${
+          <section>
+              <p>These are the current on-screen settings. They may not be identical to the settings on the pedal, eg. if they have not been edited or the preset has been changed. All numbers are MIDI values.</p>
+              <h4>Preset</h4>
+              <ul>
+                  <li>${summary.preset || "None selected"}</li>
+              </ul>
+          </section>
+          
+          <section>
+              <h4>Delay</h4>
+              <ul>
+                  <li>Model: ${summary.delay.model || "None selected"}</li>
+                  <li>Time: ${summary.delay.time || "63"}</li>
+                  <li>Subdivision: ${summary.delay.subdivision || "1/4"}</li>
+                  <li>Repeats: ${summary.delay.repeats || "63"}</li>
+                  <li>${summary.delay.tweak.parameter}: ${
         summary.delay.tweak.value || "63"
       }</li>
-                    <li>${summary.delay.tweez.parameter}: ${
+                  <li>${summary.delay.tweez.parameter}: ${
         summary.delay.tweez.value || "63"
       }</li>
-                    <li>Mix: ${summary.delay.mix || "63"}</li>
-                </ul>
-            </section>
-            
-            <section>
-                <h4>Reverb</h4>
-                <ul>
-                    <li>Model: ${summary.reverb.model || "None selected"}</li>
-                    <li>Decay: ${summary.reverb.decay || "63"}</li>
-                    <li>${summary.reverb.tweak.parameter}: ${
+                  <li>Mix: ${summary.delay.mix || "63"}</li>
+              </ul>
+          </section>
+          
+          <section>
+              <h4>Reverb</h4>
+              <ul>
+                  <li>Model: ${summary.reverb.model || "None selected"}</li>
+                  <li>Decay: ${summary.reverb.decay || "63"}</li>
+                  <li>${summary.reverb.tweak.parameter}: ${
         summary.reverb.tweak.value || "63"
       }</li>
-                    <li>Mix: ${summary.reverb.mix || "63"}</li>
-                    <li>Routing: ${summary.reverb.routing}</li>
-                </ul>
-            </section>
-        `;
+                  <li>Mix: ${summary.reverb.mix || "63"}</li>
+                  <li>Routing: ${summary.reverb.routing}</li>
+              </ul>
+          </section>
+      `;
     }
 
     function showSummary() {
@@ -647,6 +658,115 @@ function onEnabled() {
       document.querySelector(".backdrop").classList.remove("visible");
     }
 
+    function setupSyncButton() {
+      const syncButton = document.getElementById("syncButton");
+
+      syncButton.addEventListener("click", () => {
+        const myOutput = WebMidi.getOutputByName("DL4 MkII");
+        const myChannel = myOutput.channels[1];
+
+        try {
+          // Get current values using MDC slider instances
+          const getSliderValue = (cc) => {
+            const slider = document.querySelector(`[data-cc="${cc}"]`);
+            if (slider && slider.mdcSliderInstance) {
+              return Math.min(
+                127,
+                Math.max(0, Math.round(slider.mdcSliderInstance.getValue()))
+              );
+            }
+            return 63; // Default value
+          };
+
+          // Get delay model
+          const delaySelect = new mdc.select.MDCSelect(
+            document.querySelector("#delays .mdc-select")
+          );
+          const delayModelIndex =
+            delaySelect.value !== "" ? parseInt(delaySelect.value) : null;
+
+          // Get reverb model
+          const reverbSelect = new mdc.select.MDCSelect(
+            document.querySelector("#reverbs .mdc-select")
+          );
+          const reverbModelIndex =
+            reverbSelect.value !== "" ? parseInt(reverbSelect.value) : null;
+
+          // Get routing value
+          const routingValue =
+            parseInt(
+              document.querySelector(".segment-button.active")?.dataset.value
+            ) || 0;
+
+          // Send delay model selection if one is selected
+          if (delayModelIndex !== null) {
+            myChannel.sendControlChange(1, delayModelIndex);
+          }
+
+          // Always send delay parameters
+          myChannel.sendControlChange(11, getSliderValue(11)); // Time
+          myChannel.sendControlChange(12, getSliderValue(12)); // Subdivision
+          myChannel.sendControlChange(13, getSliderValue(13)); // Repeats
+          myChannel.sendControlChange(14, getSliderValue(14)); // Tweak
+          myChannel.sendControlChange(15, getSliderValue(15)); // Tweez
+          myChannel.sendControlChange(16, getSliderValue(16)); // Mix
+
+          // Send reverb model selection if one is selected
+          if (reverbModelIndex !== null) {
+            myChannel.sendControlChange(2, reverbModelIndex);
+          }
+
+          // Always send reverb parameters
+          myChannel.sendControlChange(17, getSliderValue(17)); // Decay
+          myChannel.sendControlChange(18, getSliderValue(18)); // Tweak
+          myChannel.sendControlChange(19, routingValue); // Routing
+          myChannel.sendControlChange(20, getSliderValue(20)); // Mix
+
+          console.log("Settings synced:", {
+            delay: {
+              model: delayModelIndex,
+              time: getSliderValue(11),
+              subdivision: getSliderValue(12),
+              repeats: getSliderValue(13),
+              tweak: getSliderValue(14),
+              tweez: getSliderValue(15),
+              mix: getSliderValue(16),
+            },
+            reverb: {
+              model: reverbModelIndex,
+              decay: getSliderValue(17),
+              tweak: getSliderValue(18),
+              routing: routingValue,
+              mix: getSliderValue(20),
+            },
+          });
+
+          // Show success feedback
+          syncButton.disabled = true;
+          syncButton.textContent = "Settings Synced!";
+          setTimeout(() => {
+            syncButton.disabled = false;
+            syncButton.innerHTML = `
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__label">Sync</span>
+            `;
+          }, 2000);
+        } catch (error) {
+          console.error("Error syncing settings:", error);
+          syncButton.textContent = "Sync Error!";
+          setTimeout(() => {
+            syncButton.disabled = false;
+            syncButton.innerHTML = `
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__label">Sync</span>
+            `;
+          }, 2000);
+        }
+      });
+    }
+
+    // Set up event listeners
+    setupSyncButton();
     showSummaryButton.addEventListener("click", showSummary);
     showSummaryNav.addEventListener("click", (e) => {
       e.preventDefault();
@@ -657,6 +777,7 @@ function onEnabled() {
     // Close on backdrop click
     document.querySelector(".backdrop").addEventListener("click", closeSummary);
   }
+
   // Component initialization
   function initializeMDCComponents() {
     document.querySelectorAll(".mdc-slider").forEach((slider) => {

@@ -495,6 +495,13 @@ h4 {
   z-index: 1000;
 }
 
+.summary-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
 #showSummaryButton {
   background-color: var(--mdc-theme-surface);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -569,11 +576,6 @@ h4 {
   position: absolute;
   left: 0;
   color: var(--mdc-theme-primary);
-}
-
-#closeSummaryButton {
-  display: block;
-  margin: var(--spacing-lg) auto 0;
 }
 
 /* Responsive Design */
