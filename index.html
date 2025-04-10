@@ -47,7 +47,7 @@
             </a>
             <a href="#" class="nav-item" id="showSummaryNav">
                 <span class="material-icons">summarize</span>
-                <span class="nav-label">Current Settings</span>
+                <span class="nav-label">Sync Settings</span>
             </a>
         </div>
     </nav>
@@ -581,16 +581,22 @@
         <button class="mdc-button mdc-button--outlined" id="showSummaryButton">
             <span class="mdc-button__ripple"></span>
             <span class="material-icons mdc-button__icon">summarize</span>
-            <span class="mdc-button__label">Current Settings</span>
+            <span class="mdc-button__label">Sync Settings</span>
         </button>
         <div class="summary-dialog" id="summaryDialog">
             <div class="summary-content">
-                <h3>Current Settings</h3>
+                <h3>Sync Settings</h3>
                 <div id="summaryText"></div>
-                <button class="mdc-button mdc-button--outlined" id="closeSummaryButton">
-                    <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__label">Close</span>
-                </button>
+                <div class="summary-actions">
+                    <button class="mdc-button mdc-button--outlined" id="syncButton">
+                        <span class="mdc-button__ripple"></span>
+                        <span class="mdc-button__label">Sync</span>
+                    </button>
+                    <button class="mdc-button mdc-button--outlined" id="closeSummaryButton">
+                        <span class="mdc-button__ripple"></span>
+                        <span class="mdc-button__label">Close</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
